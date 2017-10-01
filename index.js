@@ -10,6 +10,7 @@ var url = require('url');
 var bin = './ngrok' + (platform === 'win32' ? '.exe' : '');
 var ready = /starting web service.*addr=(\d+\.\d+\.\d+\.\d+:\d+)/;
 var inUse = /address already in use/;
+var dirname = __dirname.replace('app.asar', 'app.asar.unpacked');
 
 var noop = function() {};
 var emitter = new Emitter().on('error', noop);
@@ -108,7 +109,7 @@ function runNgrok(opts, cb) {
 	ngrok = spawn(
 			bin,
 			start,
-			{cwd: __dirname + '/bin'});
+			{cwd: dirname + '/bin'});
 
 
 	ngrok.stdout.on('data', function (data) {
@@ -203,7 +204,7 @@ function authtoken(token, cb, configPath) {
 	var a = spawn(
 		bin,
 		authtoken,
-		{cwd: __dirname + '/bin'});
+		{cwd: dirname + '/bin'});
 	a.stdout.once('data', done.bind(null, null, token));
 	a.stderr.once('data', done.bind(null, new Error('cant set authtoken')));
 
