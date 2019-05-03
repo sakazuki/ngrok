@@ -1,17 +1,18 @@
 {
   "name": "ngrok",
-  "version": "2.2.22",
+  "version": "3.1.1",
   "description": "node wrapper for ngrok",
   "main": "index.js",
   "types": "ngrok.d.ts",
   "scripts": {
-    "test": "node ./node_modules/mocha/bin/_mocha",
+    "test": "node ./node_modules/mocha/bin/_mocha --exit",
     "postinstall": "node ./postinstall.js",
     "postupdate": "node ./postinstall.js"
   },
   "files": [
     "index.js",
     "postinstall.js",
+    "process.js",
     "bin/ngrok",
     "ngrok.d.ts"
   ],
@@ -33,18 +34,21 @@
   },
   "devDependencies": {
     "chai": "~3.5.0",
+    "colors": "^1.3.2",
     "homedir": "^0.6.0",
-    "mocha": "~3.4.2"
+    "mocha": "^5.2.0"
   },
   "dependencies": {
-    "@types/node": "^8.0.19",
-    "async": "^2.3.0",
-    "decompress-zip": "^0.3.0",
-    "lock": "^0.1.2",
-    "request": "^2.55.0",
-    "uuid": "^3.0.0"
+    "@types/node": "^8.10.30",
+    "decompress-zip": "^0.3.2",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.5",
+    "uuid": "^3.3.2"
   },
   "bin": {
     "ngrok": "./bin/ngrok"
+  },
+  "engines": {
+    "node": ">=8.3.0"
   }
 }
