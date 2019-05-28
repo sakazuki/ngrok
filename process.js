@@ -1,8 +1,7 @@
 const { spawn } = require('child_process');
 const platform = require('os').platform();
 
-const dirname = __dirname.replace('app.asar', 'app.asar.unpacked');
-const defaultDir = dirname + '/bin';
+const defaultDir = __dirname + '/bin';
 const bin = './ngrok' + (platform === 'win32' ? '.exe' : '');
 const ready = /starting web service.*addr=(\d+\.\d+\.\d+\.\d+:\d+)/;
 const inUse = /address already in use/;
@@ -29,7 +28,12 @@ async function getProcess(opts) {
 
 async function startProcess (opts) {
 	let dir = defaultDir;
-	const start = ['start', '--none', '--log=stdout'];
+	const start = ['start', '--log=stdout'];
+	if (opts.startArgs) {
+		start.push(...opts.startArgs.split(/\s+/));
+	} else {
+		start.push('--none');
+	}
 	if (opts.region) start.push('--region=' + opts.region);
 	if (opts.configPath) start.push('--config=' + opts.configPath);
 	if (opts.binPath) dir = opts.binPath(dir);

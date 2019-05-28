@@ -96,4 +96,9 @@ interface INgrokOptions {
      * Custom binary path, eg for prod in electron
      */
     binPath?: (defaultPath: string) => string;
+
+    /*
+     * Custom start args. default --none.
+     */
+    startArgs?: string;
 }
