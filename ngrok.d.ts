@@ -1,3 +1,5 @@
+import { CoreOptions, Request, RequestAPI, RequiredUriUrl } from 'request';
+
 /**
  * Creates a ngrok tunnel.
  * E.g:
@@ -29,16 +31,34 @@ export function disconnect(url?: string): Promise<void>;
 export function kill(): Promise<void>;
 
 /**
+ * Gets the ngrok client URL.
+ */
+export function getUrl(): string | null;
+
+/**
+ * Gets the ngrok client API.
+ */
+export function getApi(): RequestAPI<Request, CoreOptions, RequiredUriUrl> | null;
+
+/**
  * You can create basic http-https-tcp tunnel without authtoken.
  * For custom subdomains and more you should obtain authtoken by signing up at ngrok.com.
  * E.g:
  *     await ngrok.authtoken(token);
  *     // or
+ *     await ngrok.authtoken({ authtoken: token, ... });
+ *     // or
  *     const url = await ngrok.connect({ authtoken: token, ... });
  *
  * @param token
  */
-export function authtoken(token: string): Promise<void>;
+export function authtoken(token: string | INgrokOptions): Promise<void>;
+
+/**
+ *
+ * Gets the version of the ngrok binary.
+ */
+export function getVersion(options?: INgrokOptions): Promise<string>;
 
 interface INgrokOptions {
     /**
@@ -60,7 +80,7 @@ interface INgrokOptions {
      *
      * @default opts.port || opts.host || 80
      */
-    addr?: string|number;
+    addr?: string | number;
 
     /**
      * HTTP Basic authentication for tunnel.
@@ -85,7 +105,7 @@ interface INgrokOptions {
      *
      * @default 'us'
      */
-    region?: 'us' | 'eu' | 'au' | 'ap';
+    region?: 'us' | 'eu' | 'au' | 'ap' | 'sa' | 'jp' | 'in';
 
     /**
      * Custom path for ngrok config file.
@@ -96,6 +116,17 @@ interface INgrokOptions {
      * Custom binary path, eg for prod in electron
      */
     binPath?: (defaultPath: string) => string;
+
+    /**
+     * Callback called when ngrok logs an event.
+     */
+    onLogEvent?: (logEventMessage: string) => any;
+
+    /**
+     * Callback called when session status is changed.
+     * When connection is lost, ngrok will keep trying to reconnect.
+     */
+    onStatusChange?: (status: 'connected' | 'closed') => any;
 
     /*
      * Custom start args. default --none.
